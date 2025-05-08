@@ -180,7 +180,7 @@ export default function Projects() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 50 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="relative w-full max-w-5xl max-h-[90vh] overflow-hidden bg-white rounded-xl shadow-2xl"
+              className="relative w-full max-w-5xl bg-white rounded-xl shadow-2xl overflow-y-auto max-h-[90vh]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close button */}
@@ -194,7 +194,7 @@ export default function Projects() {
                 </svg>
               </button>
               
-              <div className="flex flex-col md:flex-row h-full">
+              <div className="flex flex-col md:flex-row">
                 {/* Left side - Hero image and gallery */}
                 <div className="md:w-7/12 relative">
                   <div className="h-72 md:h-[600px] relative">
@@ -227,7 +227,7 @@ export default function Projects() {
                 </div>
                 
                 {/* Right side - Content */}
-                <div className="md:w-5/12 p-6 md:p-8 md:overflow-y-auto max-h-[600px] custom-scrollbar">
+                <div className="md:w-5/12 p-6 md:p-8 md:overflow-y-auto md:max-h-[600px] custom-scrollbar">
                   {/* Project Overview */}
                   <div className="mb-8">
                     <h3 className="text-2xl font-serif font-semibold text-slate-800 mb-4 flex items-center">
