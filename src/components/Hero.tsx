@@ -3,14 +3,15 @@ import { motion } from 'framer-motion';
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   
-  // Array of background images for the carousel
-  const backgroundImages = [
-    '/images/building1.jpg',
-    '/images/building2.jpg',
-    '/images/building3.jpg',
-    '/images/building4.jpg',
+  // Array of background media (images and video) for the carousel
+  const backgroundMedia = [
+    { type: 'video', src: '/videos/architecture-showcase.mp4', poster: '/images/building1.jpg' },
+    { type: 'image', src: '/images/building1.jpg' },
+    { type: 'image', src: '/images/building2.jpg' },
+    { type: 'image', src: '/images/building3.jpg' },
+    { type: 'image', src: '/images/building4.jpg' },
   ];
 
   useEffect(() => {
@@ -22,20 +23,45 @@ export default function Hero() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Auto-rotate images every 5 seconds
+  // Auto-rotate media every 8 seconds (longer for video)
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => 
-        prevIndex === backgroundImages.length - 1 ? 0 : prevIndex + 1
+      setCurrentMediaIndex((prevIndex) => 
+        prevIndex === backgroundMedia.length - 1 ? 0 : prevIndex + 1
       );
-    }, 5000);
+    }, 8000);
     
     return () => clearInterval(interval);
   }, []);
 
   // Function to handle dot click
   const handleDotClick = (index: number) => {
-    setCurrentImageIndex(index);
+    setCurrentMediaIndex(index);
+  };
+
+  // Add state for video controls
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  // Function to toggle play/pause
+  const togglePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  // Function to open video in fullscreen
+  const openFullscreen = () => {
+    if (videoRef.current) {
+      if (videoRef.current.requestFullscreen) {
+        videoRef.current.requestFullscreen();
+      }
+    }
   };
 
   return (
@@ -43,32 +69,53 @@ export default function Hero() {
       id="home"
       className="relative h-screen w-full flex items-center justify-center overflow-hidden"
     >
-      {/* Background with parallax effect and image carousel */}
-      {backgroundImages.map((image, index) => (
+      {/* Background with parallax effect and media carousel */}
+      {backgroundMedia.map((media, index) => (
         <div 
           key={index}
           className={`absolute inset-0 z-0 transition-opacity duration-1000 ease-in-out ${
-            index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+            index === currentMediaIndex ? 'opacity-100' : 'opacity-0'
           }`}
           style={{ 
-            backgroundImage: `url('${image}')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
             transform: `translateY(${scrollY * 0.15}px)`,
             transition: 'transform 0.1s ease-out, opacity 1s ease-in-out',
-            filter: 'brightness(1.05) contrast(1.05)' // Slightly enhance brightness and contrast
           }}
-        ></div>
+        >
+          {media.type === 'video' ? (
+            <video 
+              ref={videoRef}
+              muted 
+              loop 
+              playsInline
+              poster={media.poster}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ filter: 'brightness(1.05) contrast(1.05)' }}
+            >
+              <source src={media.src} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <div 
+              className="absolute inset-0 w-full h-full"
+              style={{ 
+                backgroundImage: `url('${media.src}')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                filter: 'brightness(1.05) contrast(1.05)'
+              }}
+            ></div>
+          )}
+        </div>
       ))}
       
       {/* Navigation dots for the carousel */}
       <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3">
-        {backgroundImages.map((_, index) => (
+        {backgroundMedia.map((_, index) => (
           <button
             key={index}
             onClick={() => handleDotClick(index)}
             className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentImageIndex 
+              index === currentMediaIndex 
                 ? 'bg-teal-400 ring-2 ring-teal-400 ring-offset-2 ring-offset-slate-900/50' 
                 : 'bg-white/30 hover:bg-teal-400/50'
             }`}
@@ -76,6 +123,41 @@ export default function Hero() {
           />
         ))}
       </div>
+      
+      {/* Video controls (only shown when video is active) */}
+      {backgroundMedia[currentMediaIndex].type === 'video' && (
+        <div className="absolute bottom-44 left-1/2 transform -translate-x-1/2 z-30">
+          <div className="px-4 py-3 bg-slate-900/70 text-white rounded-lg backdrop-blur-sm flex items-center gap-4 shadow-lg">
+            <button 
+              onClick={togglePlayPause}
+              className="p-2.5 rounded-full bg-teal-500/90 hover:bg-teal-500 transition-colors flex items-center justify-center"
+              aria-label={isPlaying ? "Pause video" : "Play video"}
+            >
+              {isPlaying ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                </svg>
+              )}
+            </button>
+            
+            <button 
+              onClick={openFullscreen}
+              className="p-2.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors flex items-center justify-center"
+              aria-label="View full screen"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z" clipRule="evenodd" />
+              </svg>
+            </button>
+            
+            <span className="text-sm font-medium ml-1">Watch Video</span>
+          </div>
+        </div>
+      )}
       
       {/* Sophisticated gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-slate-800/75 to-slate-700/60 z-10"></div>
