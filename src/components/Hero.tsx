@@ -371,7 +371,7 @@ export default function Hero() {
               {/* Main image with enhanced styling */}
               <div className="relative h-[500px] w-full rounded-sm overflow-hidden shadow-2xl">
                 <img 
-                  src="/images/modern_residential.jpeg" 
+                  src="/images/elevation2.jpg" 
                   alt="Featured architectural project" 
                   className="h-full w-full object-cover"
                 />
