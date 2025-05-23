@@ -4,10 +4,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface Project {
   id: number;
   title: string;
-  category: string;
   image: string;
   description: string;
   year: string;
+  client: string;
+  location: string;
+  size: string;
+  keyFeatures: string[];
+  gallery: string[];
+  longDescription: string;
+  pdfFiles?: { name: string; url: string }[];
 }
 
 export default function Projects() {
@@ -15,46 +21,133 @@ export default function Projects() {
   const projects: Project[] = [
     {
       id: 1,
-      title: "Modern Residential Complex",
-      category: "Residential",
-      image: "/images/modern_residential.jpg",
-      description: "A contemporary residential complex designed with sustainability in mind, featuring open spaces and natural light.",
-      year: "2023"
+      title: "Neeraja Srinivas Residency",
+      image: "/images/elevation1.jpg",
+      description: "The residence exemplifies modern urban living with a fusion of minimalist form, sustainable elements, and refined aesthetics.",
+      year: "2020",
+      client: "Neeraja Srinivas",
+      location: "Vijayawada, India",
+      size: "4,500 sq ft",
+      keyFeatures: [
+        "Modern Architecture",
+        "Natural Lighting",
+        "Natural ventilation design",
+        "Energy Efficient",
+        "Functional Design"
+      ],
+      gallery: [
+          "/images/neeraja1.jpg",
+          "/images/neeraja2.jpg",
+          "/images/neeraja3.jpg",
+          "/images/neeraja4.jpg",
+          "/images/neeraja5.jpg",
+          "/images/neeraja6.jpg",
+          "/images/neeraja7.jpg",
+          "/images/neeraja8.jpg",
+          "/images/neeraja9.jpg",
+          "/images/neeraja13.jpg",
+          
+      ],
+      longDescription: "The residence exemplifies modern urban living with a fusion of minimalist form, sustainable elements, and refined aesthetics. The use of natural textures (wood, stone, and concrete finishes) juxtaposed with clean lines and sharp geometry creates a timeless architectural expression.The design maximizes functionality, spatial flow, and daylight penetration, integrating indoor-outdoor harmony through balconies, vertical garden walls, and planter beds."
     },
     {
       id: 2,
-      title: "Urban Office Tower",
-      category: "Commercial",
-      image: "/images/urban_office_tower.jpg",
-      description: "A sleek office tower in the heart of the city, balancing functionality with aesthetic appeal.",
-      year: "2022"
+      title: "Telangana Housing Society",
+      image: "/images/telengana_housing.jpeg",
+      description: "This project is a high-density residential development designed to provide sustainable and affordable urban housing.",
+      year: "2022",
+      client: "TechCorp Solutions",
+      location: "Mumbai, India",
+      size: "85,000 sq ft",
+      keyFeatures: [
+        "LEED Platinum certified",
+        "Automated building management",
+        "Green roof system",
+        "Advanced HVAC systems",
+        "Smart parking solutions",
+        "Collaborative workspaces"
+      ],
+      gallery: [
+        "/images/self_sufficient.jpeg",
+        "/images/site_analysis.jpeg",
+        "/images/site_introduction.jpeg",
+        "/images/site_plan.jpeg"
+      ],
+      longDescription: "This project is a high-density residential development designed to provide sustainable and affordable urban housing. It integrates livability, walkability, and community-centric design principles to meet the growing demand for equitable urban living.",
+      pdfFiles: [
+        {
+          name: "Site Analysis",
+          url: "/docs/site_analysis.pdf"
+        },
+        {
+          name: "Site Introduction",
+          url: "/docs/site_introduction.pdf"
+        },
+        {
+          name: "Self Sufficienct Report",
+          url: "/docs/self_sufficient.pdf"
+        }
+      ]
     },
     {
       id: 3,
       title: "Cultural Arts Center",
-      category: "Public",
       image: "/images/cultural_architecture_center.jpg",
       description: "A vibrant cultural center that serves as a hub for artistic expression and community gatherings.",
-      year: "2021"
+      year: "2021",
+      client: "Ministry of Culture",
+      location: "Delhi, India",
+      size: "65,000 sq ft",
+      keyFeatures: [
+        "Acoustic optimization",
+        "Flexible performance spaces",
+        "Digital art galleries",
+        "Community workshop areas",
+        "Outdoor amphitheater",
+        "Heritage preservation zones"
+      ],
+      gallery: [
+        "/images/cultural_architecture_center.jpg",
+        "/images/cultural_center_2.jpg",
+        "/images/cultural_center_3.jpg",
+        "/images/cultural_center_4.jpg"
+      ],
+      longDescription: "The Cultural Arts Center is a celebration of India's rich artistic heritage while embracing modern design principles. The center features multiple performance spaces, including a main auditorium with perfect acoustics and a flexible black box theater. The design incorporates traditional architectural elements with contemporary materials, creating a space that honors the past while looking to the future. The center serves as a hub for artists, performers, and community members to come together and celebrate culture."
     },
   ];
-
-  // Categories for filtering
-  const categories = ["All", "Residential", "Commercial", "Public"];
-  const [activeCategory, setActiveCategory] = React.useState("All");
   
   // State for modal
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Filtered projects based on active category
-  const filteredProjects = activeCategory === "All" 
-    ? projects 
-    : projects.filter(project => project.category === activeCategory);
-    
+  // Add state for gallery carousel
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Add state for lightbox
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
+  // Function to handle next image
+  const nextImage = () => {
+    if (selectedProject) {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === selectedProject.gallery.length - 1 ? 0 : prevIndex + 1
+      );
+    }
+  };
+
+  // Function to handle previous image
+  const prevImage = () => {
+    if (selectedProject) {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === 0 ? selectedProject.gallery.length - 1 : prevIndex - 1
+      );
+    }
+  };
+
   // Function to open modal with project details
   const openProjectDetails = (project: Project) => {
     setSelectedProject(project);
+    setCurrentImageIndex(0);
     setIsModalOpen(true);
     // Prevent scrolling when modal is open
     document.body.style.overflow = 'hidden';
@@ -64,6 +157,19 @@ export default function Projects() {
   const closeModal = () => {
     setIsModalOpen(false);
     // Re-enable scrolling
+    document.body.style.overflow = 'auto';
+  };
+
+  // Function to open lightbox
+  const openLightbox = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsLightboxOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Function to close lightbox
+  const closeLightbox = () => {
+    setIsLightboxOpen(false);
     document.body.style.overflow = 'auto';
   };
 
@@ -87,26 +193,9 @@ export default function Projects() {
           </p>
         </motion.div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-12">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              className={`px-4 py-2 rounded-full text-sm transition-all duration-300 ${
-                activeCategory === category
-                  ? 'bg-teal-400 text-white shadow-md'
-                  : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-              }`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project) => (
+          {projects.map((project) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, scale: 0.9 }}
@@ -123,9 +212,6 @@ export default function Projects() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                   <div className="p-6 w-full">
-                    <span className="text-xs font-medium text-teal-400 bg-slate-900/50 px-3 py-1 rounded-full">
-                      {project.category}
-                    </span>
                     <p className="text-white mt-2 text-sm">{project.year}</p>
                   </div>
                 </div>
@@ -134,7 +220,7 @@ export default function Projects() {
                 <h3 className="text-xl font-serif font-bold text-slate-800 mb-2">
                   {project.title}
                 </h3>
-                <p className="text-slate-600 text-sm font-sans">
+                <p className="text-slate-600 text-sm font-sans text-justify">
                   {project.description}
                 </p>
                 <div className="mt-4 pt-4 border-t border-slate-100">
@@ -204,9 +290,6 @@ export default function Projects() {
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent flex flex-col justify-end p-8">
-                      <span className="inline-block px-3 py-1 mb-3 text-xs font-medium text-teal-400 bg-slate-900/60 rounded-full backdrop-blur-sm">
-                        {selectedProject.category}
-                      </span>
                       <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-2 drop-shadow-md">
                         {selectedProject.title}
                       </h2>
@@ -217,11 +300,59 @@ export default function Projects() {
                   {/* Project gallery - visible on mobile only */}
                   <div className="p-6 md:hidden">
                     <h3 className="text-xl font-semibold text-slate-800 mb-4">Project Gallery</h3>
-                    <div className="grid grid-cols-2 gap-3">
-                      <img src={selectedProject.image} alt="Gallery 1" className="rounded-lg w-full h-32 object-cover" />
-                      <img src={selectedProject.image} alt="Gallery 2" className="rounded-lg w-full h-32 object-cover" />
-                      <img src={selectedProject.image} alt="Gallery 3" className="rounded-lg w-full h-32 object-cover" />
-                      <img src={selectedProject.image} alt="Gallery 4" className="rounded-lg w-full h-32 object-cover" />
+                    <div className="relative">
+                      <div className="relative h-48 rounded-lg overflow-hidden">
+                        <img 
+                          src={selectedProject.gallery[currentImageIndex]} 
+                          alt={`Gallery ${currentImageIndex + 1}`} 
+                          className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={openLightbox}
+                        />
+                        {/* Navigation buttons */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            prevImage();
+                          }}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md transition-all"
+                        >
+                          <svg className="w-6 h-6 text-slate-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            nextImage();
+                          }}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md transition-all"
+                        >
+                          <svg className="w-6 h-6 text-slate-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
+                      {/* Thumbnail navigation */}
+                      <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                        {selectedProject.gallery.map((image, index) => (
+                          <button
+                            key={index}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentImageIndex(index);
+                            }}
+                            className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden ${
+                              currentImageIndex === index ? 'ring-2 ring-teal-500' : ''
+                            }`}
+                          >
+                            <img 
+                              src={image} 
+                              alt={`Thumbnail ${index + 1}`} 
+                              className="w-full h-full object-cover"
+                            />
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -234,14 +365,8 @@ export default function Projects() {
                       <span className="w-8 h-1 bg-teal-400 mr-3"></span>
                       Project Overview
                     </h3>
-                    <p className="text-slate-600 mb-4 leading-relaxed">
-                      {selectedProject.description}
-                    </p>
-                    <p className="text-slate-600 mb-4 leading-relaxed">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor.
-                    </p>
-                    <p className="text-slate-600 leading-relaxed">
-                      Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere.
+                    <p className="text-slate-600 mb-4 leading-relaxed text-justify">
+                      {selectedProject.longDescription}
                     </p>
                   </div>
                   
@@ -254,11 +379,11 @@ export default function Projects() {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
                         <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Client</span>
-                        <p className="text-slate-800 font-medium mt-1">ABC Corporation</p>
+                        <p className="text-slate-800 font-medium mt-1">{selectedProject.client}</p>
                       </div>
                       <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
                         <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Location</span>
-                        <p className="text-slate-800 font-medium mt-1">New York, NY</p>
+                        <p className="text-slate-800 font-medium mt-1">{selectedProject.location}</p>
                       </div>
                       <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
                         <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Year</span>
@@ -266,7 +391,7 @@ export default function Projects() {
                       </div>
                       <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
                         <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Size</span>
-                        <p className="text-slate-800 font-medium mt-1">12,500 sq ft</p>
+                        <p className="text-slate-800 font-medium mt-1">{selectedProject.size}</p>
                       </div>
                     </div>
                   </div>
@@ -278,38 +403,16 @@ export default function Projects() {
                       Key Features
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div className="flex items-start p-3 bg-slate-50 rounded-lg border border-slate-100">
-                        <div className="bg-teal-400/20 p-2 rounded-full mr-3">
-                          <svg className="h-5 w-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                          </svg>
+                      {selectedProject.keyFeatures.map((feature, index) => (
+                        <div key={index} className="flex items-start p-3 bg-slate-50 rounded-lg border border-slate-100">
+                          <div className="bg-teal-400/20 p-2 rounded-full mr-3">
+                            <svg className="h-5 w-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <span className="text-slate-700">{feature}</span>
                         </div>
-                        <span className="text-slate-700">Sustainable materials</span>
-                      </div>
-                      <div className="flex items-start p-3 bg-slate-50 rounded-lg border border-slate-100">
-                        <div className="bg-teal-400/20 p-2 rounded-full mr-3">
-                          <svg className="h-5 w-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                          </svg>
-                        </div>
-                        <span className="text-slate-700">Energy-efficient design</span>
-                      </div>
-                      <div className="flex items-start p-3 bg-slate-50 rounded-lg border border-slate-100">
-                        <div className="bg-teal-400/20 p-2 rounded-full mr-3">
-                          <svg className="h-5 w-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                          </svg>
-                        </div>
-                        <span className="text-slate-700">Natural lighting</span>
-                      </div>
-                      <div className="flex items-start p-3 bg-slate-50 rounded-lg border border-slate-100">
-                        <div className="bg-teal-400/20 p-2 rounded-full mr-3">
-                          <svg className="h-5 w-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                          </svg>
-                        </div>
-                        <span className="text-slate-700">Smart home integration</span>
-                      </div>
+                      ))}
                     </div>
                   </div>
                   
@@ -319,36 +422,214 @@ export default function Projects() {
                       <span className="w-8 h-1 bg-teal-400 mr-3"></span>
                       Project Gallery
                     </h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <img 
-                        src={selectedProject.image} 
-                        alt="Gallery 1" 
-                        className="rounded-lg w-full h-32 object-cover hover:opacity-90 transition-opacity cursor-pointer"
-                      />
-                      <img 
-                        src={selectedProject.image} 
-                        alt="Gallery 2" 
-                        className="rounded-lg w-full h-32 object-cover hover:opacity-90 transition-opacity cursor-pointer"
-                      />
-                      <img 
-                        src={selectedProject.image} 
-                        alt="Gallery 3" 
-                        className="rounded-lg w-full h-32 object-cover hover:opacity-90 transition-opacity cursor-pointer"
-                      />
-                      <img 
-                        src={selectedProject.image} 
-                        alt="Gallery 4" 
-                        className="rounded-lg w-full h-32 object-cover hover:opacity-90 transition-opacity cursor-pointer"
-                      />
+                    <div className="relative">
+                      <div className="relative h-64 rounded-lg overflow-hidden">
+                        <img 
+                          src={selectedProject.gallery[currentImageIndex]} 
+                          alt={`Gallery ${currentImageIndex + 1}`} 
+                          className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={openLightbox}
+                        />
+                        {/* Navigation buttons */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            prevImage();
+                          }}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md transition-all"
+                        >
+                          <svg className="w-6 h-6 text-slate-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            nextImage();
+                          }}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md transition-all"
+                        >
+                          <svg className="w-6 h-6 text-slate-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
+                      {/* Thumbnail navigation */}
+                      <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                        {selectedProject.gallery.map((image, index) => (
+                          <button
+                            key={index}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentImageIndex(index);
+                            }}
+                            className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden ${
+                              currentImageIndex === index ? 'ring-2 ring-teal-500' : ''
+                            }`}
+                          >
+                            <img 
+                              src={image} 
+                              alt={`Thumbnail ${index + 1}`} 
+                              className="w-full h-full object-cover"
+                            />
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
+                  
+                  {/* PDF Documents Section */}
+                  {selectedProject.pdfFiles && selectedProject.pdfFiles.length > 0 && (
+                    <div className="mb-8">
+                      <h3 className="text-2xl font-serif font-semibold text-slate-800 mb-4 flex items-center">
+                        <span className="w-8 h-1 bg-teal-400 mr-3"></span>
+                        Project Documents
+                      </h3>
+                      <div className="grid grid-cols-1 gap-3">
+                        {selectedProject.pdfFiles.map((pdf, index) => (
+                          <a
+                            key={index}
+                            href={pdf.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center p-4 bg-slate-50 rounded-lg border border-slate-100 hover:bg-slate-100 transition-colors group"
+                          >
+                            <div className="bg-red-400/20 p-2 rounded-full mr-3">
+                              <svg className="h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                              </svg>
+                            </div>
+                            <div className="flex-1">
+                              <span className="text-slate-700 font-medium">{pdf.name}</span>
+                            </div>
+                            <svg className="h-5 w-5 text-slate-400 group-hover:text-slate-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Project Gallery - Mobile only */}
+                  <div className="p-6 md:hidden">
+                    <h3 className="text-xl font-semibold text-slate-800 mb-4">Project Gallery</h3>
+                    <div className="relative">
+                      <div className="relative h-48 rounded-lg overflow-hidden">
+                        <img 
+                          src={selectedProject.gallery[currentImageIndex]} 
+                          alt={`Gallery ${currentImageIndex + 1}`} 
+                          className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={openLightbox}
+                        />
+                        {/* Navigation buttons */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            prevImage();
+                          }}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md transition-all"
+                        >
+                          <svg className="w-6 h-6 text-slate-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            nextImage();
+                          }}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md transition-all"
+                        >
+                          <svg className="w-6 h-6 text-slate-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
+                      {/* Thumbnail navigation */}
+                      <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                        {selectedProject.gallery.map((image, index) => (
+                          <button
+                            key={index}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentImageIndex(index);
+                            }}
+                            className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden ${
+                              currentImageIndex === index ? 'ring-2 ring-teal-500' : ''
+                            }`}
+                          >
+                            <img 
+                              src={image} 
+                              alt={`Thumbnail ${index + 1}`} 
+                              className="w-full h-full object-cover"
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Lightbox */}
+                  <AnimatePresence>
+                    {isLightboxOpen && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+                        onClick={closeLightbox}
+                      >
+                        <div className="relative w-full h-full flex items-center justify-center">
+                          <img
+                            src={selectedProject.gallery[currentImageIndex]}
+                            alt={`Gallery ${currentImageIndex + 1}`}
+                            className="max-w-full max-h-[90vh] object-contain"
+                          />
+                          {/* Close button */}
+                          <button
+                            onClick={closeLightbox}
+                            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
+                          >
+                            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                          {/* Navigation buttons */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              prevImage();
+                            }}
+                            className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors"
+                          >
+                            <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              nextImage();
+                            }}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors"
+                          >
+                            <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </button>
+                          {/* Image counter */}
+                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white bg-black/50 px-4 py-2 rounded-full">
+                            {currentImageIndex + 1} / {selectedProject.gallery.length}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                   
                   {/* Call to action */}
                   <div className="mt-8 pt-6 border-t border-slate-200">
                     <div className="flex flex-col">
-                      <p className="text-slate-600 mb-4">
-                        Interested in a similar project? Let's discuss your ideas.
-                      </p>
                       <a
                         href="#contact"
                         onClick={closeModal}

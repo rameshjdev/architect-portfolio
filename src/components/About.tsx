@@ -34,13 +34,14 @@ export default function About() {
           <div className="order-1 md:order-2">
             <h3 className="text-2xl font-semibold mb-6 text-slate-800">Architect & Designer</h3>
             
-            <p className="text-slate-600 mb-8 leading-relaxed text-align-justify">
-              I'm Lakshmi Gayathri, an architect passionate about creating spaces that blend functionality, 
-              aesthetics, and sustainability. With over 5 years of experience in the field, I've worked on 
-              a diverse range of projects from residential homes to commercial complexes.
+            <p className="text-slate-600 mb-8 leading-relaxed text-justify">
+            I'm a multifaceted Architect and Designer with over 5 years of professional experience, 
+            combining strong technical expertise, creative design thinking, and a project management mindset. 
+            Your work bridges traditional architectural principles with modern digital tools like AutoCAD, Revit, 
+            and SketchUp to deliver precise, code-compliant, and client-aligned design solutions.
             </p>
             
-            <p className="text-slate-600 mb-10 leading-relaxed text-align-justify">
+            <p className="text-slate-600 mb-10 leading-relaxed text-justify">
               My design philosophy centers around understanding the unique needs of each client and 
               translating them into architectural solutions that exceed expectations. I believe in the 
               power of thoughtful design to transform how we live and interact with our environment.
@@ -67,6 +68,18 @@ export default function About() {
                     <span className="w-2 h-2 bg-slate-800 rounded-full mr-3"></span>
                     <span className="text-slate-600">Innovative solutions</span>
                   </li>
+                  <li className="flex items-center">
+                    <span className="w-2 h-2 bg-slate-800 rounded-full mr-3"></span>
+                    <span className="text-slate-600">Design precision</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-2 h-2 bg-slate-800 rounded-full mr-3"></span>
+                    <span className="text-slate-600">Collaborative communication</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-2 h-2 bg-slate-800 rounded-full mr-3"></span>
+                    <span className="text-slate-600">A balance of practical execution</span>
+                  </li>
                 </ul>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-md transition-transform hover:translate-y-[-5px] duration-300">
@@ -79,15 +92,27 @@ export default function About() {
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <span className="w-2 h-2 bg-slate-800 rounded-full mr-3"></span>
-                    <span className="text-slate-600">Residential design</span>
+                    <span className="text-slate-600">Architectural Design</span>
                   </li>
                   <li className="flex items-center">
                     <span className="w-2 h-2 bg-slate-800 rounded-full mr-3"></span>
-                    <span className="text-slate-600">Commercial spaces</span>
+                    <span className="text-slate-600">Project Management</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-2 h-2 bg-slate-800 rounded-full mr-3"></span>
+                    <span className="text-slate-600">Construction Site Execution</span>
                   </li>
                   <li className="flex items-center">
                     <span className="w-2 h-2 bg-slate-800 rounded-full mr-3"></span>
                     <span className="text-slate-600">Interior architecture</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-2 h-2 bg-slate-800 rounded-full mr-3"></span>
+                    <span className="text-slate-600">Teaching & Mentoring</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-2 h-2 bg-slate-800 rounded-full mr-3"></span>
+                    <span className="text-slate-600">Heritage and Environmental Design</span>
                   </li>
                 </ul>
               </div>

@@ -10,10 +10,11 @@ export default function Hero() {
   // Array of background media (images and video) for the carousel
   const backgroundMedia = [
     { type: 'video', src: '/videos/architecture-showcase.mp4', poster: '/images/building1.jpg' },
-    { type: 'image', src: '/images/building1.jpg' },
-    { type: 'image', src: '/images/building2.jpg' },
-    { type: 'image', src: '/images/building3.jpg' },
-    { type: 'image', src: '/images/building4.jpg' },
+    { type: 'image', src: '/images/neeraja1.jpg' },
+    { type: 'image', src: '/images/neeraja2.jpg' },
+    { type: 'image', src: '/images/neeraja3.jpg' },
+    { type: 'image', src: '/images/neeraja4.jpg' },
+
   ];
 
   // Add state for video controls
@@ -268,7 +269,7 @@ export default function Hero() {
               className="inline-block"
             >
               <span className="text-sm uppercase tracking-[0.25em] font-sans font-light border-b border-teal-400 pb-1">
-                Architect & Interior Designer
+                Architect &  Designer
               </span>
             </motion.div>
             
@@ -323,10 +324,20 @@ export default function Hero() {
                 </svg>
               </a>
               <a 
-                href="#contact" 
-                className="group px-8 py-3 border border-teal-400 text-white font-medium rounded-sm hover:bg-white hover:text-slate-900 transition-all duration-300 relative overflow-hidden"
+                href="/docs/resume.pdf" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group px-8 py-3 border border-teal-400 text-white font-medium rounded-sm hover:bg-white hover:text-slate-900 transition-all duration-300 relative overflow-hidden flex items-center gap-2"
               >
-                <span className="relative z-10">Contact Me</span>
+                <span className="relative z-10">Download CV</span>
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="h-5 w-5 relative z-10" 
+                  viewBox="0 0 20 20" 
+                  fill="currentColor"
+                >
+                  <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd" />
+                </svg>
                 <span className="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
               </a>
             </motion.div>
@@ -343,12 +354,8 @@ export default function Hero() {
                 <p className="text-sm text-gray-300">Years Experience</p>
               </div>
               <div className="group">
-                <h3 className="text-3xl font-bold text-teal-400 group-hover:text-teal-300 transition-colors">40+</h3>
+                <h3 className="text-3xl font-bold text-teal-400 group-hover:text-teal-300 transition-colors">3</h3>
                 <p className="text-sm text-gray-300">Projects Completed</p>
-              </div>
-              <div className="group">
-                <h3 className="text-3xl font-bold text-teal-400 group-hover:text-teal-300 transition-colors">12+</h3>
-                <p className="text-sm text-gray-300">Design Awards</p>
               </div>
             </motion.div>
           </motion.div>
@@ -364,15 +371,12 @@ export default function Hero() {
               {/* Main image with enhanced styling */}
               <div className="relative h-[500px] w-full rounded-sm overflow-hidden shadow-2xl">
                 <img 
-                  src="/images/villa.jpg" 
+                  src="/images/modern_residential.jpeg" 
                   alt="Featured architectural project" 
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
                 <div className="absolute bottom-6 left-6 text-white max-w-xs">
-                  <p className="text-sm font-light text-teal-300">Featured Project</p>
-                  <h3 className="text-xl font-medium">Modern Minimalist Villa</h3>
-                  <p className="text-sm text-gray-300 mt-1">Award-winning residential design with sustainable features</p>
                 </div>
               </div>
               
