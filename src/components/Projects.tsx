@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Project {
@@ -55,7 +55,7 @@ export default function Projects() {
       title: "Neeraja Srinivas Residency",
       image: "/images/elevation1.jpg",
       description: "The residence exemplifies modern urban living with a fusion of minimalist form, sustainable elements, and refined aesthetics.",
-      year: "2020",
+      year: "2019",
       client: "Neeraja Srinivas",
       location: "Vijayawada, India",
       size: "4,500 sq ft",
@@ -84,24 +84,25 @@ export default function Projects() {
     {
       id: 3,
       title: "Divisional Mescom Office",
-      image: "/images/telengana_housing.jpeg",
-      description: "This project is a high-density residential development designed to provide sustainable and affordable social housing.",
-      year: "2019",
-      client: "Telangana Government",
-      location: "Kollur, Telangana, India",
-      size: "111 Acres",
+      image: "/images/mescom1.jpg",
+      description: "This project is one of the governament orgonizations in the state of Karnataka.",
+      year: "2018",
+      client: "Mescom",
+      location: "JPS Colony, Bhadrvathi, India",
+      size: "1700 Sq ft",
       keyFeatures: [
-        "Sustainability",
+        "Functional Design",
         "Energy Efficient",
         "Blend Of Built and Green Spaces",
-        "Self Sufficient Community Design"
+        "Natural Lighting and Ventilation"
       ],
       gallery: [
-        "/images/site_analysis.jpeg",
-        "/images/site_introduction.jpg",
-        "/images/self_sufficient.jpeg",
+        "/images/mescom1.jpg",
+        "/images/mescom2.jpg",
+        "/images/mescom3.jpg",
+        "/images/mescom4.jpg"
       ],
-      longDescription: "This project is a high-density residential development designed to provide sustainable and affordable social housing. It integrates livability, walkability, and community-centric design principles to meet the growing demand for equitable urban living.",
+      longDescription: "This is designed as per the function with natural lighting. The harmonny in the design can be seen throughout the design. The upper floor consists of balcony which has green area to minimize the energy consumption.",
     },
     {
       id: 4,
@@ -125,7 +126,43 @@ export default function Projects() {
       ],
       longDescription: "This project is a high-density residential development designed to provide sustainable and affordable social housing. It integrates livability, walkability, and community-centric design principles to meet the growing demand for equitable urban living.",
     },
+    {
+      id: 5,
+      title: "RK Therli Associates",
+      image: "/images/therli1.jpg",
+      description: "As an intern in this firm I experienced different projects starting from gateway designs to site development.",
+      year: "2015",
+      client: "Adikavi & Bhaskara",
+      location: "Kakinada, India",
+      size: "",
+      keyFeatures: [
+        "Replica Of Heritage",
+        "Spatial Planning",
+        "Building Codes and By Laws",
+      ],
+      gallery: [
+        "/images/therli2.jpeg",
+        "/images/therli3.jpeg",
+        "/images/therli4.jpeg",
+        "/images/therli5.jpeg",
+        "/images/therli6.jpeg",
+        "/images/therli7.jpeg",
+        "/images/therli8.jpeg",
+        "/images/therli9.jpg",
+        "/images/therli10.jpeg",
+        "/images/therli11.jpg",
+        "/images/therli12.jpeg",
+        "/images/therli13.jpeg",
+        "/images/therli14.jpeg",
+        "/images/therli15.jpg",
+        "/images/therli16.jpeg",
+      ],
+      longDescription: "As an intern in this firm I experienced different projects starting from gateway designs to site development.So Here are the list of projects that I get to work (Residence|Library, Gateway Design, Bhaskara Estates Site Development, Dispensery)",
+    },
   ];
+  
+  // Sort projects by year in descending order (oldest to newest)
+  const sortedProjects = [...projects].sort((a, b) => parseInt(a.year) - parseInt(b.year));
   
   // State for modal
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -184,6 +221,27 @@ export default function Projects() {
     document.body.style.overflow = 'auto';
   };
 
+  // Add this function to prevent image downloads
+  const preventImageDownload = (e: React.MouseEvent) => {
+    e.preventDefault();
+    return false;
+  };
+  
+  // Add this effect to disable right-click on the entire page
+  useEffect(() => {
+    const disableRightClick = (e: MouseEvent) => {
+      if (isModalOpen || isLightboxOpen) {
+        e.preventDefault();
+        return false;
+      }
+    };
+    
+    document.addEventListener('contextmenu', disableRightClick);
+    return () => {
+      document.removeEventListener('contextmenu', disableRightClick);
+    };
+  }, [isModalOpen, isLightboxOpen]);
+  
   return (
     <section id="projects" className="py-20 bg-primary/5">
       <div className="max-w-6xl mx-auto px-6">
@@ -206,7 +264,7 @@ export default function Projects() {
 
         {/* Projects Grid */}
         <div className="flex overflow-x-auto pb-8 gap-8 snap-x snap-mandatory scrollbar-hide">
-          {projects.map((project) => (
+          {sortedProjects.map((project) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, scale: 0.9 }}
@@ -220,6 +278,8 @@ export default function Projects() {
                   src={project.image}
                   alt={project.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  onContextMenu={preventImageDownload}
+                  draggable="false"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                   <div className="p-6 w-full">
@@ -390,10 +450,12 @@ export default function Projects() {
                           <h4 className="text-sm font-medium text-primary/60 mb-1">Location</h4>
                           <p className="text-primary">{selectedProject.location}</p>
                         </div>
-                        <div>
-                          <h4 className="text-sm font-medium text-primary/60 mb-1">Size</h4>
-                          <p className="text-primary">{selectedProject.size}</p>
-                        </div>
+                        {selectedProject.size && (
+                          <div>
+                            <h4 className="text-sm font-medium text-primary/60 mb-1">Size</h4>
+                            <p className="text-primary">{selectedProject.size}</p>
+                          </div>
+                        )}
                       </div>
 
                       <div>
@@ -454,7 +516,9 @@ export default function Projects() {
                 <img
                   src={selectedProject.gallery[currentImageIndex]}
                   alt={selectedProject.title}
-                  className="w-full h-full object-contain rounded-lg"
+                  className="w-full h-full object-contain rounded-lg user-select-none"
+                  onContextMenu={preventImageDownload}
+                  draggable="false"
                 />
               </motion.div>
             </motion.div>

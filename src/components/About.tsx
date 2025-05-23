@@ -35,9 +35,9 @@ export default function About() {
             <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-3 sm:mb-4 md:mb-6 text-primary">Architect & Designer</h3>
             
             <p className="text-primary/80 mb-4 sm:mb-6 md:mb-8 leading-relaxed text-justify text-sm sm:text-base">
-              I'm a multifaceted Architect and Designer with over 5 years of professional experience, 
+              I'm an Architect and Designer with over 5 years of professional experience, 
               combining strong technical expertise, creative design thinking, and a project management mindset. 
-              Your work bridges traditional architectural principles with modern digital tools like AutoCAD, Revit, 
+              My work bridges traditional architectural principles with modern digital tools like AutoCAD, Revit, 
               and SketchUp to deliver precise, code-compliant, and client-aligned design solutions.
             </p>
             

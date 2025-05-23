@@ -101,7 +101,7 @@ const Contact = () => {
           <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-primary">Get In Touch</h2>
           <div className="w-24 h-1 bg-gradient-to-r from-accent to-accent/70 mx-auto"></div>
           <p className="mt-6 text-primary/80 max-w-2xl mx-auto text-lg">
-            I'm interested in freelance opportunities and collaborations. If you have a project that needs creative architectural solutions, let's connect.
+            I'm interested in working with you to create something amazing. Whether it's a job oppurtunity, a collaboration, or just a friendly chat, I'd love to hear from you.
           </p>
         </motion.div>
         
@@ -198,7 +198,7 @@ const Contact = () => {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-accent"></span>
                 </span>
-                <span className="text-primary/80">Available for new projects</span>
+                <span className="text-primary/80">Available for New Job Oppurtunities</span>
               </div>
             </div>
           </motion.div>

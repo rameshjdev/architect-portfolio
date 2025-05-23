@@ -354,7 +354,7 @@ export default function Hero() {
                 <p className="text-sm text-gray-300">Years Experience</p>
               </div>
               <div className="group">
-                <h3 className="text-3xl font-bold text-teal-400 group-hover:text-teal-300 transition-colors">3</h3>
+                <h3 className="text-3xl font-bold text-teal-400 group-hover:text-teal-300 transition-colors">10+</h3>
                 <p className="text-sm text-gray-300">Projects Completed</p>
               </div>
             </motion.div>
