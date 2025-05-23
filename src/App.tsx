@@ -9,12 +9,14 @@ import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
-    <div className="font-sans text-slate-800">
+    <div className="min-h-screen w-full font-sans text-slate-800 overflow-x-hidden">
       <Header />
-      <Hero />
-      <About />
-      <Projects />
-      <Contact />
+      <main className="relative w-full">
+        <Hero />
+        <About />
+        <Projects />
+        <Contact />
+      </main>
       <Footer />
       <ScrollToTop />
     </div>
